@@ -2,17 +2,16 @@ const { uniqueId } = require("lodash");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
-const planSchema = new schema({
-   planName: {
+const workoutSchema = new schema({
+   workoutName: {
       type: String,
       required: true,
       uniqueId: true,
    },
-   workouts: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "workouts",
+   gif: {
+      type: String,
    },
 });
 
-const user = mongoose.model("plan", planSchema);
+const user = mongoose.model("workout", workoutSchema);
 module.exports = user;
