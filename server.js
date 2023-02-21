@@ -11,11 +11,17 @@ app.use('/user',userRouter);
 app.post('/login',(req,res)=>{
 
     const user=req.body;
-
-    console.log('hi + ' + user.body.email +'hi')
     if(user){
-        return res.send('new person added');
+        return res.status(200).send('successfully');
     }
     res.status(400).send('canot accept');
 })
+app.post('/register',(req,res)=>{
+
+    const user=req.body;
+    if(user){
+        return res.status(200).send('successfully');
+    }
+    res.status(400).send('canot accept');
+});
 app.listen(3000);
