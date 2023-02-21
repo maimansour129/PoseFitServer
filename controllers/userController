@@ -8,30 +8,35 @@ const dbURI='mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?r
 mongoose.connect(dbURI,{useNewUrlParser:true , useUnifiedTopology:true})
 .catch((err)=>console.log(err));
 
-const login= (req, res) => {
-    User.exists({name:req.body.email , password:req.body.password})
-    .then((result)=>{
-        res.send({status:true});
-        console.log(result);
-    })
-    .catch((err)=>{
-        console.log(err);
+const  login= async (req, res) => {
+     User.findOne({email:req.body.email , password:req.body.password},function (error, user) {
+
+        if(user===null){
+            res.status(200).send('not found');
+        }
+        else{
+            res.status(404).send('found');
+        }
     });
 
-   /* const user=new User({
-        email: req.body.email,
 
-        password:req.body.password
-    });
-    user.save()
-    .then((result)=>{
-        res.send('student added');
-    })
-    .catch((err)=>{
-        console.log(err);
-
-    });*/
+    }
+    const register= (req, res) => {
+        const user=new User({
+            email: req.body.email,
+    
+            password:req.body.password
+        });
+        user.save()
+        .then((result)=>{
+            res.send('User added');
+        })
+        .catch((err)=>{
+            console.log(err);
+    
+        });
     }
     module.exports={
-        login
+        login,
+        register
     }
