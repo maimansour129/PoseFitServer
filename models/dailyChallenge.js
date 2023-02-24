@@ -7,9 +7,9 @@ const challengeSchema=new schema({
         type:String,
        
     },
-    workout:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'workout'
-    },
+    // workout:{
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'workout'
+    // },
     target:{
         type:number,
     }

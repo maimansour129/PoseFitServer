@@ -8,10 +8,10 @@ const planSchema = new schema({
       required: true,
       uniqueId: true,
    },
-   workouts: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "workouts",
-   },
+   // workouts: {
+   //    type: mongoose.Schema.Types.ObjectId,
+   //    ref: "workouts",
+   // },
 });
 
 const user = mongoose.model("plan", planSchema);
