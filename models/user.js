@@ -51,7 +51,7 @@ function validateUser(user) {
       height: Joi.number().min(0),
    });
 
-   return schema.validate(user._doc, { allowUnknown: true });
+   return schema.validate(user);
 }
 
 const user = mongoose.model("User", userSchema);
