@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const workoutSchema = new schema({
-   workoutName: {
-      type: String,
-      required: true,
-      uniqueId: true,
-   },
-   gif: {
-      type: String,
-   },
+  workoutName: {
+    type: String,
+    required: true,
+    uniqueId: true,
+  },
+  gif: {
+    type: String,
+  },
+  type:{
+   type:string
+  }
 });
 
 const user = mongoose.model("workout", workoutSchema);
