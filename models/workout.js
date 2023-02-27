@@ -12,7 +12,7 @@ const workoutSchema = new schema({
     type: String,
   },
   type:{
-   type:string
+   type:String
   }
 });
 
