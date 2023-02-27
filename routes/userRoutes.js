@@ -3,13 +3,13 @@ const router = express.Router();
 
 const {
   login,
-  register,
+  signup,
   updateUser,
 } = require("../controllers/userController");
 
 router.post("/login", login);
 
-router.post("/register", register);
+router.post("/register", signup);
 
 router.put("/:id", updateUser);
 

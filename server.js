@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const userRouter = require("./routes/userRoute");
+const userRouter = require("./routes/userRoutes");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const { spawn } = require("child_process");
 const Workout = require("./models/workout");
@@ -18,6 +19,7 @@ mongoose
 // Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // routes
 app.use("/api/user", userRouter);
