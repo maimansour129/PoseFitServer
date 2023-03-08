@@ -52,4 +52,13 @@ app.post("/create", (req, res) => {
        console.log(err);
      });
  });
+ 
+ app.get("/workout", (req, res) => {
+  Plan.find({ "workouts.rep": 15 }).populate('workout').then(result=>{
+     res.send(result)
+  }).catch(err=>{
+     res.send(err);
+  })
+});
+
 
