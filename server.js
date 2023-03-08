@@ -54,11 +54,12 @@ app.post("/create", (req, res) => {
  });
  
  app.get("/workout", (req, res) => {
-  Plan.find({ "workouts.rep": 15 }).populate('workout').then(result=>{
-     res.send(result)
-  }).catch(err=>{
-     res.send(err);
-  })
+  var wID=Plan.findOne({ "planeName":"test3" }).workouts;
+  var ans=Workout.findOne({_id:wID}).then((result) => {
+    res.send(ans);
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 
