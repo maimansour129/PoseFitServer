@@ -1,12 +1,11 @@
 const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRoutes");
+const workoutRouter=require("./routes/workoutRoutes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const { spawn } = require("child_process");
-const Workout = require("./models/workout");
-const Plan = require("./models/Plan");
+
 
 const dbURI =
   "mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?retryWrites=true&w=majority";
@@ -23,43 +22,6 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/user", userRouter);
-
-app.post("/addWorkout", (req, res) => {
-  const workout = new Workout({
-    workoutName: req.body.workoutName,
-  });
-  workout
-    .save()
-    .then((result) => {
-      res.send(true);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-app.post("/create", (req, res) => {
-   const plan = new Plan({
-      planName:req.body.name,
-      workouts: req.body.workoutName,
-   });
-
-   plan
-     .save()
-     .then((result) => {
-       res.send(true);
-     })
-     .catch((err) => {
-       console.log(err);
-     });
- });
- 
- app.get("/workout", (req, res) => {
-  var wID=Plan.findOne({ "planeName":"test3" }).workouts;
-  var ans=Workout.findOne({_id:wID}).then((result) => {
-    res.send(ans);
-  }).catch((err) => {
-    console.log(err);
-  });
-});
+app.use("/api/workout", workoutRouter);
 
 

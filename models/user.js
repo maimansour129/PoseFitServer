@@ -38,9 +38,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  Planid: {
+  plan: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Plan",
+    ref: "plan",
     required: true,
   },
 });
@@ -54,6 +54,7 @@ function validateUser(user) {
     age: Joi.number().min(0),
     weight: Joi.number().min(0),
     height: Joi.number().min(0),
+    plan:Joi.string().min(0)
   });
 
   return schema.validate(user);
