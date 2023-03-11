@@ -98,9 +98,20 @@ const getPlan = async (req, res) => {
     .catch((error) => console.log(error));
 };
 
+const getName = async (req, res) => {
+  console.log("teeeeeeeeeest23 "+(req.body.email));
+  User.find({ email:req.body.email})
+   .select({ name: 1, _id: 0 })
+   .then((p) => res.send(p))
+   .catch((error) => console.log(error));
+
+   
+};
+
 module.exports = {
   login,
   signup,
   updateUser,
   getPlan,
+  getName,
 };
