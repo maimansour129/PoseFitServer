@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const [User, validateUser] = require("../models/user");
+const plan=require("../models/Plan");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -27,7 +28,7 @@ const login = async (req, res) => {
     const token = createToken(user._id);
 
     res.cookie("jwt", token);
-    res.status(200).send(`Authenticated ${token}`);
+    res.status(200).send(`Authenticated`);
   } catch (error) {
     console.log(error);
   }
@@ -38,7 +39,7 @@ const signup = async (req, res) => {
 
   if (error) return res.status(400).send(error.details[0].message);
 
-  const user = new User(
+  const user = new User( 
     _.pick(req.body, [
       "email",
       "password",
@@ -83,8 +84,8 @@ const updateUser = async (req, res) => {
 };
 
 const getPlan = async (req, res) => {
-   console.log("teeeeeeeeeest "+req.body);
-  User.find({ email: req.body.email })
+   console.log("teeeeeeeeeest "+(req.body.email));
+   User.find({ email:req.body.email})
     .select({ email: 1, _id: 0 })
     .populate({
       path: "plan",
