@@ -5,6 +5,7 @@ const workoutRouter=require("./routes/workoutRoutes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const axios = require('axios')
 
 
 const dbURI =
@@ -25,3 +26,15 @@ app.use("/api/user", userRouter);
 app.use("/api/workout", workoutRouter);
 
 
+app.post('/model', (req, res) => {
+
+  const imageFile = req.body.file
+  const imageStr = Buffer.from(imageFile.data).toString('base64')
+
+  axios
+    .post('http://127.0.0.1:5000/bicepCurl', imageStr, {
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    })
+    .then((response) => res.json(response.data))
+    .catch((err) => res.send(err))
+})
