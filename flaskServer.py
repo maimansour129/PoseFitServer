@@ -27,7 +27,7 @@ def process():
     #x to show returned image
     x = recieve_frame(img)
 
-    #cv2.imwrite('try4.png', x)
+    cv2.imwrite('try4.png', x)
 
     #TODO: return needed response
     return jsonify({'msg': 'success'})
