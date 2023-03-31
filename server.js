@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const authRouter = require("./routes/authRoutes");
-=======
+
 const modelRouter=require("./routes/modelRoutes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -54,7 +54,7 @@ app.post("/model", (req, res) => {
     .catch((err) => res.send(err));
   console.log(res.body);
 });
-=======
+
 app.use("/api/workout", workoutRouter);
 app.use("/api/model", modelRouter);
 
