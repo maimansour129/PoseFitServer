@@ -1,12 +1,11 @@
 const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRoutes");
-const workoutRouter=require("./routes/workoutRoutes");
+const workoutRouter = require("./routes/workoutRoutes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const axios = require('axios')
-
+const axios = require("axios");
 
 const dbURI =
   "mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?retryWrites=true&w=majority";
@@ -25,16 +24,17 @@ app.use(cookieParser());
 app.use("/api/user", userRouter);
 app.use("/api/workout", workoutRouter);
 
-
-app.post('/model', (req, res) => {
-
-  const imageFile = req.body.file
-  const imageStr = Buffer.from(imageFile.data).toString('base64')
+app.post("/model", (req, res) => {
+  console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii  "+req.body.image)
+  const imageFile = req.body;
+  const imageStr = Buffer.from(imageFile.image).toString("base64");
+  
 
   axios
-    .post('http://127.0.0.1:5000/bicepCurl', imageStr, {
+    .post("http://127.0.0.1:5000/bicepCurl", imageStr, {
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     })
     .then((response) => res.json(response.data))
-    .catch((err) => res.send(err))
-})
+    .catch((err) => res.send(err));
+  console.log(res.body);
+});
