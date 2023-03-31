@@ -2,12 +2,19 @@ const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRoutes");
 const workoutRouter = require("./routes/workoutRoutes");
+
 const {requireAuth, checkUser} = require("./middleware/authMiddleware")
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const authRouter = require("./routes/authRoutes");
+=======
+const modelRouter=require("./routes/modelRoutes");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const mongoose = require("mongoose");
+
 
 const dbURI =
   "mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?retryWrites=true&w=majority";
@@ -29,6 +36,7 @@ app.use((req, res, next) => {
 // routes
 app.use("*", checkUser);
 app.use("/api/user", userRouter);
+
 app.use("/api/workout", requireAuth, workoutRouter);
 app.use(authRouter);
 
@@ -46,3 +54,7 @@ app.post("/model", (req, res) => {
     .catch((err) => res.send(err));
   console.log(res.body);
 });
+=======
+app.use("/api/workout", workoutRouter);
+app.use("/api/model", modelRouter);
+
