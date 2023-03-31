@@ -1,0 +1,81 @@
+const [User, validateUser] = require("../models/user");
+const jwt = require("jsonwebtoken");
+const _ = require("lodash");
+const bcrypt = require("bcrypt");
+
+const handleErrors = (err) => {
+   console.log(err.message, err.code);
+   let errors = "";
+
+   //duplicate error code
+   if (err.code === 11000) {
+      errors = "This email is already registered";
+      return errors;
+   }
+
+   //validation errors
+   if (err.message.includes("user validation failed")) {
+      Object.values(err.errors).forEach(
+         ({ properties }) => (errors[properties.path] = properties.message)
+      );
+   }
+
+   return errors;
+};
+
+const createToken = (id) => {
+   return jwt.sign({ id }, "my private key");
+};
+
+module.exports.signup_post = async (req, res) => {
+   const { error } = validateUser(req.body);
+
+   try {
+      if (error) return res.status(400).send(error.details[0].message);
+
+      const user = new User(
+         _.pick(req.body, [
+            "email",
+            "password",
+            "name",
+            "age",
+            "targetWeight",
+            "height",
+            "weight",
+            "plan",
+         ])
+      );
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+
+      await user.save();
+
+      const token = createToken(user._id);
+      res.cookie("jwt", token);
+
+      res.status(201).send(user);
+   } catch (err) {
+      const errors = handleErrors(err);
+      res.status(400).json({ errors });
+   }
+};
+
+module.exports.login_post = async (req, res) => {
+   const { email, password } = req.body;
+
+   try {
+      const user = await User.login(email, password);
+      const token = createToken(user._id);
+      res.cookie("jwt", token);
+      res.status(200).json({ user: user._id });
+   } catch (err) {
+      const errors = handleErrors(err);
+      res.status(400).json({ errors });
+   }
+};
+
+module.exports.logout_get = (req, res) => {
+   res.clearCookie("jwt");
+   res.send("Cleared cookie");
+};
