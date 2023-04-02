@@ -9,11 +9,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const authRouter = require("./routes/authRoutes");
-
 const modelRouter=require("./routes/modelRoutes");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
 
 
 const dbURI =
