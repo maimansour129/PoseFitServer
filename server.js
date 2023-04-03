@@ -9,10 +9,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const authRouter = require("./routes/authRoutes");
-
 const modelRouter=require("./routes/modelRoutes");
-
-
 
 const dbURI =
   "mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?retryWrites=true&w=majority";
