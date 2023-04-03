@@ -8,7 +8,7 @@ const {
 } = require("../controllers/userController");
 
 
-router.put("/:id", updateUser);
+router.put("/update-user", updateUser);
 router.post("/plan", getPlan);
 router.post("/getName",getName)
 

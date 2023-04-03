@@ -23,14 +23,15 @@ mongoose
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-/*app.use((req, res, next) => {
+
+app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
-});*/
+});
 
 // routes
 app.use("*", checkUser);
-app.use("/api/user", userRouter);
+app.use("/api/user", requireAuth, userRouter);
 
 app.use("/api/workout", requireAuth, workoutRouter);
 app.use("/api/auth",authRouter);

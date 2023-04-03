@@ -1,35 +1,36 @@
+const jwt = require("jsonwebtoken");
 const [User] = require("../models/user");
-const Plan=require("../models/Plan");
+const Plan = require("../models/Plan");
+
+function getUserToken(token) {
+  const decodedToken = jwt.verify(token, "my private key");
+  return decodedToken;
+}
 
 const updateUser = async (req, res) => {
-  const entries = Object.keys(req.body);
-  const updates = {};
-  for (let i = 0; i < entries.length; i++) {
-    updates[entries[i]] = Object.values(req.body)[i];
-  }
+  console.log("updating user");
 
-  let user = await User.findByIdAndUpdate(
-    req.params.id,
-    { $set: updates },
-    { new: true }
-  );
+  const updatedData = req.body;
+  console.log(updatedData);
+  let user;
 
+  const decodedToken = getUserToken(req.cookies.jwt);
+  //console.log(decodedToken);
+  user = await User.findOneAndUpdate({ _id: decodedToken.id }, updatedData, {new: true});
   console.log(user);
-  if (user) {
-    return res.status(201).send("done");
-  }
-  return res.status(400).send("not done");
+
+  res.status(200).send(user);
 };
 
 const getPlan = async (req, res) => {
-   console.log("teeeeeeeeeest "+(req.body.email));
-   User.find({ email:req.body.email})
+  console.log("teeeeeeeeeest " + req.body.email);
+  User.find({ email: req.body.email })
     .select({ email: 1, _id: 0 })
     .populate({
       path: "plan",
       populate: {
         path: "workouts.workout",
-        model:"workout"
+        model: "workout",
       },
     })
     .then((p) => res.send(p))
@@ -37,13 +38,11 @@ const getPlan = async (req, res) => {
 };
 
 const getName = async (req, res) => {
-  console.log("teeeeeeeeeest23 "+(req.body.email));
-  User.find({ email:req.body.email})
-   .select({ name: 1, _id: 0 })
-   .then((p) => res.send(p))
-   .catch((error) => console.log(error));
-
-   
+  console.log("teeeeeeeeeest23 " + req.body.email);
+  User.find({ email: req.body.email })
+    .select({ name: 1, _id: 0 })
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
 };
 
 module.exports = {
