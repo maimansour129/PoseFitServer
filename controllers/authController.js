@@ -27,7 +27,7 @@ const createToken = (id) => {
    return jwt.sign({ id }, "my private key");
 };
 
-module.exports.signup_post = async (req, res) => {
+module.exports.signup_post = async (req, res) => { 
    const { error } = validateUser(req.body);
 
    try {
@@ -39,11 +39,13 @@ module.exports.signup_post = async (req, res) => {
             "password",
             "name",
             "age",
-            "targetWeight",
+            "gender",
             "height",
             "weight",
             "plan",
+            "activityLevel"
          ])
+        
       );
 
       const salt = await bcrypt.genSalt(10);

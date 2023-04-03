@@ -19,14 +19,10 @@ const userSchema = new mongoose.Schema({
       minlength: 2,
       maxlenght: 1024,
    },
-   targetWeight: {
-      type: Number,
+   gender: {
+      type: String,
       required: true,
    },
-   // activityProgress: {
-   //    type: String,
-   //    required: true,
-   // },
    age: {
       type: Number,
       required: true,
@@ -44,6 +40,10 @@ const userSchema = new mongoose.Schema({
       ref: "plan",
       required: true,
    },
+   activityLevel: {
+      type: String,
+       required: true,
+    },
 });
 
 function validateUser(user) {
@@ -51,11 +51,12 @@ function validateUser(user) {
       email: Joi.string().email(),
       password: Joi.string().min(8),
       name: Joi.string().min(2).max(1024),
-      targetWeight: Joi.number().min(0),
+      gender: Joi.string().min(0),
       age: Joi.number().min(0),
       weight: Joi.number().min(0),
       height: Joi.number().min(0),
       plan: Joi.string().min(0),
+      activityLevel: Joi.string().min(0),
    });
 
    return schema.validate(user);

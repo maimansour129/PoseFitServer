@@ -2,11 +2,11 @@ import io
 from flask import Flask, jsonify, request
 import base64
 from PIL import Image
-#import cv2
+import cv2
 import numpy as np
 
 from aiModels.bicepCurl import recieve_frame
-#from aiModels.squat import recieve_frame
+from aiModels.squat import recieve_frame as Sq
 #TODO:name of functions (recieve_frame) should be changed 
 
 api = Flask(__name__)
@@ -47,9 +47,9 @@ def squat():
 
     img = np.asarray(image)
 
-    x, counter, feedback = recieve_frame(img)
+    x, counter, feedback = Sq(img)
 
-    #cv2.imwrite('try4.png', x)
+    cv2.imwrite('try4.png', x)
 
     return jsonify({'reps': counter, 'correction': feedback})
 
