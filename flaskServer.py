@@ -5,8 +5,8 @@ from PIL import Image
 import cv2
 import numpy as np
 
-from aiModels.bicepCurl import recieve_frame
-from aiModels.squat import recieve_frame as Sq
+from aiModels.bicepCurl import recieve_frame as bc
+from aiModels.squat import recieve_frame as sq
 #TODO:name of functions (recieve_frame) should be changed 
 
 api = Flask(__name__)
@@ -25,13 +25,11 @@ def bicepCurl():
     img = np.asarray(image)
 
     #x to show returned image
-    x = recieve_frame(img)
+    x, counter, feedback = bc(img)
 
-    #cv2.imwrite('try4.png', x)
+    cv2.imwrite('try4.png', x)
 
-    #TODO: return needed response
-    #return jsonify({'reps': counter, 'correction': feedback})      //model not edited yet
-    return jsonify({'msg': 'success'})
+    return jsonify({'reps': counter, 'correction': feedback})      
 
 
 @api.route('/squat', methods=['POST'])
@@ -47,11 +45,11 @@ def squat():
 
     img = np.asarray(image)
 
-    x, counter, feedback = Sq(img)
+    x, counter, feedback = sq(img)
 
     cv2.imwrite('try4.png', x)
 
-    return jsonify({'reps': counter, 'correction': feedback})
+    return jsonify({'reps': counter, 'correction': feedback})      
 
 
 if __name__ == '__main__':
