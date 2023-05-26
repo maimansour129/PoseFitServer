@@ -1,9 +1,10 @@
-const { number } = require("joi");
+const { number, boolean } = require("joi");
 const { uniqueId } = require("lodash");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const planSchema = new schema({
+  _id: mongoose.Schema.Types.ObjectId,
   planName: {
     type: String,
     required: true,
@@ -20,8 +21,12 @@ const planSchema = new schema({
         type: Number,
       },
       sets: {
-         type: Number,
-       },
+        type: Number,
+      },
+      status: {
+        type: String,
+        default: "false",
+      },
     },
   ],
 });
