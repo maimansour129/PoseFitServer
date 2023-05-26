@@ -29,8 +29,8 @@ app.use(express.json());
 
 // routes
 //app.use("*", checkUser);
-app.use("/api/workout", requireAuth, workoutRouter);
-app.use("/api/user", requireAuth, userRouter);
+app.use("/api/workout", workoutRouter);
+app.use("/api/user", userRouter);
 app.use("/api/workout", workoutRouter);
 app.use("/api/model", modelRouter);
 app.use("/api/auth",authRouter);

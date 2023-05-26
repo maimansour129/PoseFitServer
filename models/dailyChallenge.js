@@ -1,19 +1,27 @@
+const { string } = require('joi');
 const { uniqueId } = require('lodash');
 const mongoose = require('mongoose');
 const schema= mongoose.Schema;
 
 const challengeSchema=new schema({
-    date:{
+    workout: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "workouts",
+      },
+    targetMuscele:{
         type:String,
-       
     },
-    // workout:{
-    //     type: mongoose.Schema.Types.ObjectId, ref: 'workout'
-    // },
-    target:{
-        type:number,
+    Description:{
+        type:String,
+    },
+    reps:{
+        type:Number,
+    },
+
+    flag:{
+        type:Boolean,
     }
 });
 
-const user = mongoose.model('challenge',challengeSchema);
+const user = mongoose.model('dailyChallenge',challengeSchema);
 module.exports=user;
