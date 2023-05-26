@@ -146,6 +146,12 @@ const getDailyChallenge = async (req, res) => {
     .then((p) => res.send(p))
     .catch((error) => console.log(error));
 };
+const getHistory = async (req, res) => {
+  User.find({ email: req.body.email })
+  .select({ history: 1, _id: 0 })
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
+};
 module.exports = {
   updateUser,
   getPlan,
@@ -154,5 +160,6 @@ module.exports = {
   assignPlan,
   addToUserHistory,
   setDailyChallenge,
-  getDailyChallenge
+  getDailyChallenge,
+  getHistory
 };
