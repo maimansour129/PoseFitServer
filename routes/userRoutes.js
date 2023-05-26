@@ -7,7 +7,7 @@ const {
   getName,updateStatus,
   assignPlan,
   addToUserHistory,
-  setDailyChallenge,
+  getHistory,
   getDailyChallenge
 } = require("../controllers/userController");
 
@@ -19,6 +19,8 @@ router.post("/getName",getName);
 router.put("/workoutStatus",updateStatus);
 router.post("/assignPlan",assignPlan);
 router.put("/addhistory",addToUserHistory);
+router.post("/gethistory",getHistory);
+
 
 
 
