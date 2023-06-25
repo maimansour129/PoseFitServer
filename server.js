@@ -2,13 +2,14 @@ const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRoutes");
 const workoutRouter = require("./routes/workoutRoutes");
-
+const dailyRouter= require("./routes/dailyChallengeRoutes");
 const {requireAuth, checkUser} = require("./middleware/authMiddleware")
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/authRoutes");
-const modelRouter=require("./routes/modelRoutes");
+const modelRouter= require("./routes/modelRoutes");
+
 
 const dbURI =
   "mongodb+srv://PoseFit:PoseFit@cluster.y1yvcw2.mongodb.net/PoseFit?retryWrites=true&w=majority";
@@ -34,4 +35,5 @@ app.use("/api/user", userRouter);
 app.use("/api/workout", workoutRouter);
 app.use("/api/model", modelRouter);
 app.use("/api/auth",authRouter);
+app.use("/api/challenge",dailyRouter);
 
