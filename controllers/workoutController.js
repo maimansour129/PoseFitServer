@@ -5,7 +5,7 @@ const searchForWorkout = async (req, res) => {
   console.log("hiiiiii");
   workout
     .find({ workoutName: { $regex: req.body.name, $options: "i" } })
-    .select({ workoutName: 1, gif: 1, _id: 0 })
+    .select({ workoutName: 1, gif: 1 })
     .then((result) => res.send(result))
     .catch((error) => console.log(error));
 };

@@ -4,6 +4,9 @@ const dailyChallenge = require("../models/dailyChallenge");
 const cron = require('node-cron');
 const Plan = require("../models/Plan");
 const mongoose = require("mongoose");
+const Rank=require("../models/rankingBoard");
+const _ = require("lodash");
+
 
 function getUserToken(token) {
   const decodedToken = jwt.verify(token, "my private key");
@@ -101,57 +104,31 @@ const addToUserHistory = async (req, res) => {
     .then((p) => res.send(p))
     .catch((error) => console.log(error));
 };
-
-//cron.schedule('0 */5 * * *', () => {
-//console.log('Generating daily challenge...');
-//getDailyChallenge();
-//});
-var CronJob=require('cron').CronJob;
-
-var cronJob1 = new CronJob({
-
-    cronTime: '00 00 00 * * * ',
-    onTick: function () {
-    //Your code that is to be executed on every midnight
-    setDailyChallenge();
-    },
-    start: true,
-    runOnInit: false
-});
-const setDailyChallenge = async (req, res) => {
-  console.log('getDailyChallenge called!');
-  try {
-    const result = await dailyChallenge.aggregate([{ $sample: { size: 1 } }]);
-    await dailyChallenge.updateMany(
-      { _id: { $ne: result[0]._id } },
-      { $set: { flag: false } }
-    );
-    await dailyChallenge.findOneAndUpdate(
-      { _id: result[0]._id },
-      { $set: { flag: true } }
-    );
-    console.log(result[0]); // the randomly selected document
-    res.send("success");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getDailyChallenge = async (req, res) => {
-  dailyChallenge.find({ flag: true })
-  .populate({
-    path: "workout",
-    model: "workout"
-  })
-    .then((p) => res.send(p))
-    .catch((error) => console.log(error));
-};
 const getHistory = async (req, res) => {
   User.find({ email: req.body.email })
   .select({ history: 1, _id: 0 })
     .then((p) => res.send(p))
     .catch((error) => console.log(error));
 };
+const addRank= async(req,res)=>{
+  const rank = new Rank(
+    _.pick(req.body, [
+       "user",
+       "reps",
+       "duration"
+    ]));
+
+   await rank.save()
+  .then(() => console.log('Rank saved to database'))
+  .catch((err) => console.error('Error saving user to database', err));
+}
+const getAllRanks = async (req, res) => {
+  Rank
+    .find()
+    .then((result) => res.send(result))
+    .catch((error) => console.log(error));
+};
+
 module.exports = {
   updateUser,
   getPlan,
@@ -159,7 +136,7 @@ module.exports = {
   updateStatus,
   assignPlan,
   addToUserHistory,
-  setDailyChallenge,
-  getDailyChallenge,
-  getHistory
+  getHistory,
+  addRank,
+  getAllRanks
 };
