@@ -9,7 +9,8 @@ const {
   addToUserHistory,
   getHistory,
   addRank,
-  getAllRanks
+  getAllRanks,
+  getInfo
 } = require("../controllers/userController");
 
 
@@ -23,6 +24,8 @@ router.put("/addhistory",addToUserHistory);
 router.post("/gethistory",getHistory);
 router.post("/addRank",addRank);
 router.get("/getRank",getAllRanks);
+router.post("/getInfo",getInfo);
+
 
 
 
