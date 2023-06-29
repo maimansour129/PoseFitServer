@@ -1,16 +1,17 @@
 const dailyChallenge = require("../models/dailyChallenge");
+const Rank=require("../models/rankingBoard");
 
 var CronJob=require('cron').CronJob;
 
 var cronJob1 = new CronJob({
 
-    cronTime: '00 00 00 * * * ',
+    cronTime: '0 0 * * *',
     onTick: function () {
-    //Your code that is to be executed on every midnight
     setDailyChallenge();
     },
     start: true,
-    runOnInit: false
+    runOnInit: false,
+    timeZone: 'EET'
 });
 const setDailyChallenge = async (req, res) => {
   console.log('getDailyChallenge called!');
@@ -23,12 +24,13 @@ const setDailyChallenge = async (req, res) => {
     await dailyChallenge.findOneAndUpdate(
       { _id: result[0]._id },
       { $set: { flag: true } }
-    );
+    )
     console.log(result[0]); // the randomly selected document
-    res.send("success");
   } catch (error) {
     console.error(error);
   }
+  Rank.deleteMany({})
+  .catch((error) => console.log(error));
 };
 
 const getDailyChallenge = async (req, res) => {
@@ -37,7 +39,7 @@ const getDailyChallenge = async (req, res) => {
     path: "workout",
     model: "workout"
   })
-    .then((p) => res.send(p))
+    
     .catch((error) => console.log(error));
 };
 

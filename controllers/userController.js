@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const [User] = require("../models/user");
-const dailyChallenge = require("../models/dailyChallenge");
 const cron = require('node-cron');
 const Plan = require("../models/Plan");
 const mongoose = require("mongoose");
@@ -60,6 +59,7 @@ const getName = async (req, res) => {
 };
 
 const assignPlan = async (req, res) => {
+  console.log("hhhhhhhhhhh");
   try {
     const plan = await Plan.findOne({ planName: req.body.name });
     const userPlan = new Plan({
