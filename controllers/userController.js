@@ -13,6 +13,12 @@ function getUserToken(token) {
   return decodedToken;
 }
 
+const getInfo = async (req, res) => {
+  User.find({ email: req.body.email })
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
+};
+
 const updateUser = async (req, res) => {
   console.log("updating user");
 
@@ -110,21 +116,37 @@ const getHistory = async (req, res) => {
     .then((p) => res.send(p))
     .catch((error) => console.log(error));
 };
-const addRank= async(req,res)=>{
-  const rank = new Rank(
-    _.pick(req.body, [
-       "user",
-       "reps",
-       "duration"
-    ]));
+const addRank = async (req, res) => {
+  try {
+    const { email, reps, duration } = req.body;
+    const user = await User.findOne({ email });
 
-   await rank.save()
-  .then(() => console.log('Rank saved to database'))
-  .catch((err) => console.error('Error saving user to database', err));
-}
+    if (!user) {
+      return res.status(400).json({ msg: 'User not found' });
+    }
+
+    const rank = new Rank({
+      user: user._id,
+      reps,
+      duration,
+    });
+
+    await rank.save();
+
+    console.log('Rank saved to database');
+    res.json(rank);
+  } catch (err) {
+    console.error('Error saving rank to database', err);
+    res.status(500).send('Server error');
+  }
+};
 const getAllRanks = async (req, res) => {
   Rank
     .find()
+    .populate({
+      path: "user",
+      model: "User",
+    })
     .then((result) => res.send(result))
     .catch((error) => console.log(error));
 };
@@ -138,5 +160,6 @@ module.exports = {
   addToUserHistory,
   getHistory,
   addRank,
-  getAllRanks
+  getAllRanks,
+  getInfo
 };
