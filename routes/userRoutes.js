@@ -10,7 +10,8 @@ const {
   getHistory,
   addRank,
   getAllRanks,
-  getInfo
+  getInfo,
+  getAllPlans
 } = require("../controllers/userController");
 
 
@@ -25,6 +26,8 @@ router.post("/gethistory",getHistory);
 router.post("/addRank",addRank);
 router.get("/getRank",getAllRanks);
 router.post("/getInfo",getInfo);
+router.get("/allPlans",getAllPlans);
+
 
 
 

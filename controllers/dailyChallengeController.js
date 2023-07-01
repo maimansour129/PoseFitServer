@@ -39,7 +39,7 @@ const getDailyChallenge = async (req, res) => {
     path: "workout",
     model: "workout"
   })
-    
+    .then((p) => res.send(p))
     .catch((error) => console.log(error));
 };
 

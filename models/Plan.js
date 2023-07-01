@@ -24,8 +24,8 @@ const planSchema = new schema({
         type: Number,
       },
       status: {
-        type: String,
-        default: "false",
+        type: Boolean,
+        default: false
       },
     },
   ],
