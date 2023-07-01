@@ -17,6 +17,10 @@ const userHistorySchema = new schema({
       date: {
         type: Date,
       },
+      duration:{
+        type:Number
+      }
+
   }]
 
 });

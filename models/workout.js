@@ -11,8 +11,8 @@ const workoutSchema = new schema({
   gif: {
     type: String,
   },
-  type:{
-   type:String
+  duration:{
+    type:Number
   }
 });
 

@@ -34,7 +34,19 @@ const updateUser = async (req, res) => {
 
   res.status(200).send(user);
 };
-
+const getAllPlans = async (req, res) => {
+  console.log("teeeeeeeeeest " + req.body.email);
+  Plan.find()
+    .populate({
+      path: "plan",
+      populate: {
+        path: "workouts.workout",
+        model: "workout",
+      },
+    })
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
+};
 const getPlan = async (req, res) => {
   console.log("teeeeeeeeeest " + req.body.email);
   User.find({ email: req.body.email })
@@ -161,5 +173,6 @@ module.exports = {
   getHistory,
   addRank,
   getAllRanks,
-  getInfo
+  getInfo,
+  getAllPlans
 };
