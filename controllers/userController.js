@@ -62,6 +62,18 @@ const getPlan = async (req, res) => {
     .catch((error) => console.log(error));
 };
 
+const getPlanDetails = async (req, res) => {
+  Plan.find({planName:req.body.planName})
+    .populate({
+        path: "workouts.workout",
+        model: "workout",
+      },
+    )
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
+
+};
+
 const getName = async (req, res) => {
   console.log("teeeeeeeeeest23 " + req.body.email);
   User.find({ email: req.body.email })
@@ -174,5 +186,6 @@ module.exports = {
   addRank,
   getAllRanks,
   getInfo,
-  getAllPlans
+  getAllPlans,
+  getPlanDetails
 };

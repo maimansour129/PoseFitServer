@@ -11,7 +11,8 @@ const {
   addRank,
   getAllRanks,
   getInfo,
-  getAllPlans
+  getAllPlans,
+  getPlanDetails
 } = require("../controllers/userController");
 
 
@@ -27,6 +28,7 @@ router.post("/addRank",addRank);
 router.get("/getRank",getAllRanks);
 router.post("/getInfo",getInfo);
 router.get("/allPlans",getAllPlans);
+router.post("/PlanDetail",getPlanDetails);
 
 
 
