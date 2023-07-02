@@ -1,5 +1,6 @@
 const { string } = require('joi');
 const { uniqueId } = require('lodash');
+const { Double } = require('mongodb');
 const mongoose = require('mongoose');
 const schema= mongoose.Schema;
 
@@ -13,6 +14,9 @@ const RanksSchema=new schema({
     },
 
     duration:{
+        type:Number,
+    },
+    progress:{
         type:Number,
     }
 });

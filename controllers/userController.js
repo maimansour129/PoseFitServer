@@ -140,14 +140,14 @@ const getHistory = async (req, res) => {
 };
 const addRank = async (req, res) => {
   try {
-    const { email, reps, duration } = req.body;
+    const { email, reps, duration,progress } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(400).json({ msg: 'User not found' });
     }
 
-  const rank = await Rank.findOneAndUpdate({user: user._id}, {reps:reps,duration:duration}, { new: true, upsert: true });
+  const rank = await Rank.findOneAndUpdate({user: user._id}, {reps:reps,duration:duration,progress:progress}, { new: true, upsert: true });
 
   console.log('Rank saved to database');
   res.json(rank);
@@ -160,7 +160,7 @@ const addRank = async (req, res) => {
 
 const getAllRanks = async (req, res) => {
   Rank
-    .find().sort({reps:1})
+    .find().sort({progress:-1})
     .populate({
       path: "user",
       model: "User",
