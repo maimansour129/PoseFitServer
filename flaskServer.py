@@ -12,24 +12,23 @@ from aiModels.squat import recieve_frame as sq
 api = Flask(__name__)
 
 @api.route('/bicepCurl', methods=['POST'])
-def bicepCurl():
+def bicupCurl():
 
     encoded_data = request.json
     
     decodedData = base64.b64decode(encoded_data)
 
-    decodedImage = base64.decodebytes(decodedData)
-   
-    image = Image.open(io.BytesIO(decodedImage))
-   
+    decoded_image_data = base64.decodebytes(decodedData)
+
+    image = Image.open(io.BytesIO(decoded_image_data))
+
     img = np.asarray(image)
 
-    #x to show returned image
-    x, counter, feedback = bc(img)
+    x, counter, feedback, landmarksList = bc(img)
 
-    cv2.imwrite('try4.png', x)
+    #cv2.imwrite('try4.png', x)
 
-    return jsonify({'reps': counter, 'correction': feedback})      
+    return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList})     
 
 
 @api.route('/squat', methods=['POST'])
@@ -47,7 +46,7 @@ def squat():
 
     x, counter, feedback = sq(img)
 
-    cv2.imwrite('try4.png', x)
+    #cv2.imwrite('try4.png', x)
 
     return jsonify({'reps': counter, 'correction': feedback})      
 
