@@ -25,7 +25,7 @@ const setDailyChallenge = async (req, res) => {
       { _id: result[0]._id },
       { $set: { flag: true } }
     )
-    console.log(result[0]); // the randomly selected document
+    console.log(result[0]);
   } catch (error) {
     console.error(error);
   }

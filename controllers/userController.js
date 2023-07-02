@@ -21,15 +21,13 @@ const getInfo = async (req, res) => {
 const updateUser = async (req, res) => {
   console.log("updating user");
 
-  const updatedData = req.body;
+  const updatedData = req.body.updatedData;
   console.log(updatedData);
   let user;
 
-  const decodedToken = getUserToken(req.cookies.jwt);
+  //const decodedToken = getUserToken(req.cookies.jwt);
   //console.log(decodedToken);
-  user = await User.findOneAndUpdate({ _id: decodedToken.id }, updatedData, {
-    new: true,
-  });
+  user = await User.findOneAndUpdate({ email:req.body.email }, {updatedData});
   console.log(user);
 
   res.status(200).send(user);
@@ -60,6 +58,18 @@ const getPlan = async (req, res) => {
     })
     .then((p) => res.send(p))
     .catch((error) => console.log(error));
+};
+
+const getPlanDetails = async (req, res) => {
+  Plan.find({planName:req.body.planName})
+    .populate({
+        path: "workouts.workout",
+        model: "workout",
+      },
+    )
+    .then((p) => res.send(p))
+    .catch((error) => console.log(error));
+
 };
 
 const getName = async (req, res) => {
@@ -137,24 +147,20 @@ const addRank = async (req, res) => {
       return res.status(400).json({ msg: 'User not found' });
     }
 
-    const rank = new Rank({
-      user: user._id,
-      reps,
-      duration,
-    });
+  const rank = await Rank.findOneAndUpdate({user: user._id}, {reps:reps,duration:duration}, { new: true, upsert: true });
 
-    await rank.save();
-
-    console.log('Rank saved to database');
-    res.json(rank);
-  } catch (err) {
-    console.error('Error saving rank to database', err);
-    res.status(500).send('Server error');
-  }
+  console.log('Rank saved to database');
+  res.json(rank);
+} catch (err) {
+  console.error('Error saving rank to database', err);
+  res.status(500).send('Server error');
+}
 };
+
+
 const getAllRanks = async (req, res) => {
   Rank
-    .find()
+    .find().sort({reps:1})
     .populate({
       path: "user",
       model: "User",
@@ -174,5 +180,6 @@ module.exports = {
   addRank,
   getAllRanks,
   getInfo,
-  getAllPlans
+  getAllPlans,
+  getPlanDetails
 };
