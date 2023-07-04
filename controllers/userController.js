@@ -4,6 +4,7 @@ const cron = require('node-cron');
 const Plan = require("../models/Plan");
 const mongoose = require("mongoose");
 const Rank=require("../models/rankingBoard");
+const bcrypt = require("bcrypt");
 const _ = require("lodash");
 
 
@@ -11,7 +12,17 @@ function getUserToken(token) {
   const decodedToken = jwt.verify(token, "my private key");
   return decodedToken;
 }
+const passwprdConfirmation= async (req,res)=>{
+  const user = await User.findOne({ email:req.body.email });
+  const auth = await bcrypt.compare(req.body.password, user.password);
 
+    if (auth) {  
+      res.send(true);
+    } 
+    else {
+      res.send(false);
+    }
+}
 const getInfo = async (req, res) => {
   User.find({ email: req.body.email })
     .then((p) => res.send(p))
@@ -24,11 +35,14 @@ const updateUser = async (req, res) => {
   const updatedData = req.body.updatedData;
   console.log(updatedData);
   let user;
+  const salt = await bcrypt.genSalt(10);
+  updatedData.password = await bcrypt.hash(updatedData.password, salt);
+  console.log(updatedData);
 
   //const decodedToken = getUserToken(req.cookies.jwt);
   //console.log(decodedToken);
-  user = await User.findOneAndUpdate({ email:req.body.email }, {updatedData});
-  console.log(user);
+  user = await User.findOneAndUpdate({ email:req.body.email },updatedData);
+  //console.log(user);
 
   res.status(200).send(user);
 };
@@ -181,5 +195,6 @@ module.exports = {
   getAllRanks,
   getInfo,
   getAllPlans,
-  getPlanDetails
+  getPlanDetails,
+  passwprdConfirmation
 };
