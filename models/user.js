@@ -57,7 +57,10 @@ const userSchema = new mongoose.Schema({
       },
       duration:{
         type: Number,
-      }
+      },
+      performance: {
+        type: Number,
+      },
     },
   ],
 });
