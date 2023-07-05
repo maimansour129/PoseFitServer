@@ -6,8 +6,10 @@ var CronJob=require('cron').CronJob;
 var cronJob1 = new CronJob({
 
     cronTime: '0 0 * * *',
-    onTick: function () {
+    onTick: async function () {
+    await dailyChallenge.updateMany({}, { $set: { flag: false } });
     setDailyChallenge();
+
     },
     start: true,
     runOnInit: false,
@@ -17,15 +19,13 @@ const setDailyChallenge = async (req, res) => {
   console.log('getDailyChallenge called!');
   try {
     const result = await dailyChallenge.aggregate([{ $sample: { size: 1 } }]);
-    await dailyChallenge.updateMany(
-      { _id: { $ne: result[0]._id } },
-      { $set: { flag: false } }
-    );
-    await dailyChallenge.findOneAndUpdate(
-      { _id: result[0]._id },
-      { $set: { flag: true } }
-    )
     console.log(result[0]);
+    const updatedChallenge = await dailyChallenge.findByIdAndUpdate(
+      result[0]._id,
+      { $set: { flag: true } },
+      { new: true }
+    );
+    console.log(updatedChallenge);
   } catch (error) {
     console.error(error);
   }

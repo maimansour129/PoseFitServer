@@ -95,7 +95,6 @@ const getName = async (req, res) => {
 };
 
 const assignPlan = async (req, res) => {
-  console.log("hhhhhhhhhhh");
   try {
     const plan = await Plan.findOne({ planName: req.body.name });
     const userPlan = new Plan({
