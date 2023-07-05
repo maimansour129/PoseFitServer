@@ -56,9 +56,6 @@ def receive_frame(frame):
         # Make detection
         results = pose.process(image)
     
-        # Recolor back to BGR
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         
         # Extract landmarks
         try:
