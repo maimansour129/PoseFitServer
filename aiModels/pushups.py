@@ -5,12 +5,12 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
 
+# # Curl counter variables
 counter = 0
 stage = 'down'
-instructions = ''
-landmarksList = None
+instructions = "Start training"
+landmarksList = []
 poseIsCorrect = False
-
 
 def calculate_angle(a,b,c):
     a = np.array(a) # First
@@ -25,15 +25,11 @@ def calculate_angle(a,b,c):
         
     return angle 
 
-
-
-
-def receive_Frames(frame):
+def receive_frame(frame):
 
     global counter
     global instructions
     global stage
-    global status
     global landmarksList
     global poseIsCorrect
 
@@ -64,7 +60,7 @@ def receive_Frames(frame):
             
             left_wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
             
-            left_ankel = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+            left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
             
             right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
             
@@ -74,8 +70,17 @@ def receive_Frames(frame):
             
             right_wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
             
-            right_ankel = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
+            right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
             
+            left_knee = [0,0]
+
+            right_knee = [0,0]
+
+            
+            # List to Draw Skeleton
+            landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip,
+                                left_knee, left_ankle, right_ankle, right_knee,
+                                right_hip, right_shoulder, right_elbow, right_wrist]
         
             # Calculate angle
             left_torso_angle = calculate_angle(left_wrist, left_hip, left_shoulder)
@@ -96,6 +101,7 @@ def receive_Frames(frame):
             
             if ((left_torso_angle > 100) or (right_torso_angle > 100)) :
                 poseIsCorrect = False
+                instructions = "laaaaa"
 
                 # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                 #                 mp_drawing.DrawingSpec(color=(255,0,0), thickness=4, circle_radius=2), 
@@ -105,6 +111,7 @@ def receive_Frames(frame):
             if ((left_torso_angle < 100) and (right_torso_angle < 100)):
                 
                 poseIsCorrect = True
+                instructions = "Keep Going"
 
                 mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2), 
@@ -122,8 +129,7 @@ def receive_Frames(frame):
                     instructions = "Go Up"
 
                 if ((left_elbow_angle > 30 and left_elbow_angle < 160) and (right_elbow_angle > 30 and right_elbow_angle < 160)) and stage == 'down':
-                    instructions = "Go Up more"
-                
+                    instructions = "Go Up more"             
                         
         except:
             pass

@@ -8,8 +8,8 @@ mp_pose = mp.solutions.pose
 # # Curl counter variables
 counter = 0
 stage = 'down'
-instructions = None
-landmarksList = None
+instructions = "Start training"
+landmarksList = []
 poseIsCorrect = False
 
 
@@ -28,7 +28,7 @@ def calculate_angle(a, b, c):
     return angle
 
 
-def recieve_frame(frame):
+def receive_frame(frame):
 
     global counter
     global instructions
@@ -91,9 +91,11 @@ def recieve_frame(frame):
             right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
                            landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
+
             # List to Draw Skeleton
             landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip, left_knee, left_ankle, right_ankle, right_knee,
                              right_hip, right_shoulder, right_elbow, right_wrist]
+
 
             # Calculate angle
             left_arm_hip_angle = calculate_angle(

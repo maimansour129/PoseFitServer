@@ -5,11 +5,13 @@ from PIL import Image
 import cv2
 import numpy as np
 
-from aiModels.bicepCurl import recieve_frame as bc
-from aiModels.squat import recieve_frame as sq
-from aiModels.jumpingJacks import recieve_frame as jj
-from aiModels.lunges import recieve_frame as Lunges
-
+from aiModels.bicepCurl import receive_frame as bc
+from aiModels.squat import receive_frame as sq
+from aiModels.jumpingJacks import receive_frame as jj
+from aiModels.lunges import receive_frame as Lunges
+from aiModels.pushUps import receive_frame as pu
+from aiModels.shoulderPress import receive_frame as sp
+from aiModels.tricepsKickBack import receive_frame as tc
 
 api = Flask(__name__)
 
@@ -23,7 +25,7 @@ def bicupCurl():
 
     x, counter, feedback, landmarksList, poseIsCorrect = bc(img)
 
-    # cv2.imwrite('try4.png', x)
+    #cv2.imwrite('try4.png', x)
 
     return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList, 'poseIsCorrect': poseIsCorrect})
 
@@ -55,7 +57,7 @@ def jumpingJacks():
 
     return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList, 'poseIsCorrect': poseIsCorrect})
 
-#jumpingJacks Endpoint
+#Lunges Endpoint
 @api.route('/64a5b3d4aa89be083ce2c599', methods=['POST'])
 def lunges():
 
@@ -64,6 +66,48 @@ def lunges():
     img = np.asarray(image)
 
     x, counter, feedback, landmarksList, poseIsCorrect = Lunges(img)
+
+    # cv2.imwrite('try4.png', x)
+
+    return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList, 'poseIsCorrect': poseIsCorrect})
+
+#pushUps Endpoint
+@api.route('/649f21392e97b6442159d01c', methods=['POST'])
+def pushUps():
+
+    image = Image.open(io.BytesIO(request.data))
+
+    img = np.asarray(image)
+
+    x, counter, feedback, landmarksList, poseIsCorrect = pu(img)
+
+    # cv2.imwrite('try4.png', x)
+
+    return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList, 'poseIsCorrect': poseIsCorrect})
+
+#shoulderPress Endpoint
+@api.route('/649f22b62e97b6442159d020', methods=['POST'])
+def shoulderPress():
+
+    image = Image.open(io.BytesIO(request.data))
+
+    img = np.asarray(image)
+
+    x, counter, feedback, landmarksList, poseIsCorrect = sp(img)
+
+    # cv2.imwrite('try4.png', x)
+
+    return jsonify({'reps': counter, 'correction': feedback, 'landmarks': landmarksList, 'poseIsCorrect': poseIsCorrect})
+
+#tricepsKickBack Endpoint
+@api.route('/649f21ec2e97b6442159d01e', methods=['POST'])
+def tricepsKickBack():
+
+    image = Image.open(io.BytesIO(request.data))
+
+    img = np.asarray(image)
+
+    x, counter, feedback, landmarksList, poseIsCorrect = tc(img)
 
     # cv2.imwrite('try4.png', x)
 

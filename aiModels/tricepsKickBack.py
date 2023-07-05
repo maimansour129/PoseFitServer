@@ -4,12 +4,12 @@ import numpy as np
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
+# # Curl counter variables
 counter = 0
 stage = 'down'
-instructions = ''
-landmarksList = None
+instructions = "Start training"
+landmarksList = []
 poseIsCorrect = False
-
 
 def calculate_angle(a,b,c):
     a = np.array(a) # First
@@ -30,7 +30,6 @@ def receive_frame(frame):
     global counter
     global instructions
     global stage
-    global status
     global landmarksList
     global poseIsCorrect
 
@@ -54,24 +53,35 @@ def receive_frame(frame):
             landmarks = results.pose_landmarks.landmark
             
             # Get coordinates
-            shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-            elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-            wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+            left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+            left_elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+            left_wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
             
+            left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+            left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
             
-            # Get coordinates
-            hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-            knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
-            ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+            right_shoulder  = [0,0]
+            right_elbow  = [0,0]
+            right_wrist = [0,0]
+
+            right_hip  = [0,0]
+            right_knee = [0,0]
+            right_ankle = [0,0]
             
-        
-            
+
             # Calculate angle
-            rep_angle = calculate_angle(shoulder, elbow, wrist)
-            torso_arm_angle = calculate_angle(elbow, shoulder, hip)
-            angle_hip = calculate_angle(shoulder, hip, knee)
+            rep_angle = calculate_angle(left_shoulder, left_elbow, left_wrist)
+            torso_arm_angle = calculate_angle(left_elbow, left_shoulder, left_hip)
+            angle_hip = calculate_angle(left_shoulder, left_hip, left_knee)
             
             
+            # List to Draw Skeleton
+            landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip,
+                                left_knee, left_ankle, right_ankle, right_knee,
+                                right_hip, right_shoulder, right_elbow, right_wrist]
+
+
             # counter logic
             if((angle_hip > 150) or (torso_arm_angle > 30)):
                 # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
@@ -84,19 +94,22 @@ def receive_frame(frame):
             if(angle_hip < 150) and (torso_arm_angle <= 30):
 
                 poseIsCorrect = True
+                instructions = "Keep Going"
 
                 # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                 #                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2), 
                 #                 mp_drawing.DrawingSpec(color=(0,255,0), thickness=2, circle_radius=2) 
                 #                 )
 
-                instructions = "GO"
                 if((rep_angle <= 90) and (stage == "Down")):
                     counter = counter+1
                     stage = "Up"
+                    instructions = "Go Up"
+
                 if ((rep_angle >= 150) and (stage == "Up")):
                     stage = "Down"
-            
+                    instructions = "Go Down"
+
         except:
             pass
         

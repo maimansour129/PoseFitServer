@@ -7,10 +7,9 @@ mp_pose = mp.solutions.pose
 
 # # Curl counter variables
 counter = 0
-status = None
 stage = 'down'
-instructions = None
-landmarksList = None
+instructions = "Start training"
+landmarksList = []
 poseIsCorrect = False
 
 def calculate_angle(a,b,c):
@@ -26,7 +25,7 @@ def calculate_angle(a,b,c):
         
     return angle 
 
-def recieve_frame(frame):
+def receive_frame(frame):
 
     global counter
     global instructions
@@ -54,22 +53,32 @@ def recieve_frame(frame):
             landmarks = results.pose_landmarks.landmark
             
             # Get coordinates
-            shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-            elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-            wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
+            left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+            left_elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+            left_wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
             
             # Get coordinates
-            hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-            knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
-            ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+            left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+            left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
             
+            right_shoulder  = [0,0]
+            right_elbow  = [0,0]
+            right_wrist = [0,0]
+
+            right_hip  = [0,0]
+            right_knee = [0,0]
+            right_ankle = [0,0]
+
             # List to Draw Skeleton
-            landmarksList = [wrist, elbow, shoulder, hip, knee,ankle]
+            landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip,
+                                left_knee, left_ankle, right_ankle, right_knee,
+                                right_hip, right_shoulder, right_elbow, right_wrist]
             
             # Calculate angle            
-            angle_knee = calculate_angle(hip, knee, ankle) #Knee joint angle
+            angle_knee = calculate_angle(left_hip, left_knee, left_ankle) #Knee joint angle
             
-            angle_hip = calculate_angle(shoulder, hip, knee)
+            angle_hip = calculate_angle(left_shoulder, left_hip, left_knee)
             
             # Visualize angle
             # cv2.putText(image, str(angle), 
