@@ -41,13 +41,12 @@ def receive_frame(frame):
         flippedImage = cv2.flip(x, 1)
         
         # Recolor image to RGB
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(flippedImage, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
     
         # Make detection
         results = pose.process(image)
     
-        
         # Extract landmarks
         try:
             landmarks = results.pose_landmarks.landmark
@@ -70,8 +69,18 @@ def receive_frame(frame):
             
             right_wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
             
+            left_knee = [0,0]
+            right_knee = [0,0]
+
+            left_ankle = [0,0]
+            right_ankle = [0,0]
             
-        
+            # List to Draw Skeleton
+            landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip,
+                                left_knee, left_ankle, right_ankle, right_knee,
+                                right_hip, right_shoulder, right_elbow, right_wrist]
+
+            
             # Calculate angle
             left_torso_angle = calculate_angle(left_elbow, left_shoulder, left_hip)
             left_elbow_angle = calculate_angle(left_shoulder, left_elbow, left_wrist)
@@ -97,6 +106,7 @@ def receive_frame(frame):
 
             if left_shoulder_angle < 40 or right_shoulder_angle < 40:
                 poseIsCorrect = False
+                instructions = "Fix your Posture"
 
                 # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS, 
                 #                         mp_drawing.DrawingSpec(color=(255, 0, 0), thickness=4, circle_radius=2),
@@ -109,6 +119,8 @@ def receive_frame(frame):
                 #                         mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=4, circle_radius=2)
                 #                         )
                 poseIsCorrect = True
+                instructions = "Keep Going"
+
 
                 if ((left_shoulder_angle > 120 and right_shoulder_angle > 120) and (left_elbow_angle > 120 and right_elbow_angle > 120)) and stage == "down":
                     stage = "up"
@@ -135,5 +147,5 @@ def receive_frame(frame):
 
         # cv2.imshow('Mediapipe Feed', image)
 
-        return image, counter, instructions, landmarksList, poseIsCorrect
+    return image, counter, instructions, landmarksList, poseIsCorrect
        
