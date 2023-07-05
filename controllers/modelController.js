@@ -9,10 +9,7 @@ const bicepCurl = async (req, res) => {
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     })
     .then((response) => {
-      res.send({
-        reps: response.data.reps,
-        correction: response.data.correction,
-      });
+      res.send(response.data);
     })
     .catch((err) => res.send(err));
 };
@@ -26,10 +23,7 @@ const squat = async (req, res) => {
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     })
     .then((response) => {
-      res.send({
-        reps: response.data.reps,
-        correction: response.data.correction,
-      });
+      res.send(response.data);
     })
     .catch((err) => res.send(err));
 };
