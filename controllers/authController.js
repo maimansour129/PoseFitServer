@@ -2,6 +2,7 @@ const [User, validateUser] = require("../models/user");
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+const { log } = require("console");
 
 const handleErrors = (err) => {
    console.log(err.message, err.code);
@@ -65,16 +66,19 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.login_post = async (req, res) => {
    const { email, password } = req.body;
+   const user = await User.findOne({ email });
 
-   try {
-      const user = await User.login(email, password);
-      const token = createToken(user._id);
-      res.cookie("jwt", token);
-      res.status(200).json({ user: user._id });
-   } catch (err) {
-      const errors = handleErrors(err);
-      res.status(400).json({ errors });
-   }
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+
+    if (auth) {
+      res.send("done")
+    } else {
+      console.log("hello3");
+      res.send("Invalid email or password")
+
+    }
+  }
 };
 
 module.exports.logout_get = (req, res) => {
