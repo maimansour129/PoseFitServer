@@ -96,11 +96,7 @@ def receive_frame(frame):
                 poseIsCorrect = True
                 instructions = "Keep Going"
 
-                # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                #                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2), 
-                #                 mp_drawing.DrawingSpec(color=(0,255,0), thickness=2, circle_radius=2) 
-                #                 )
-
+           
                 if((rep_angle <= 90) and (stage == "Down")):
                     counter = counter+1
                     stage = "Up"
