@@ -9,7 +9,7 @@ from aiModels.bicepCurl import receive_frame as bc
 from aiModels.squat import receive_frame as sq
 from aiModels.jumpingJacks import receive_frame as jj
 from aiModels.lunges import receive_frame as Lunges
-from aiModels.pushUps import receive_frame as pu
+from aiModels.pushups import receive_frame as pu
 from aiModels.shoulderPress import receive_frame as sp
 from aiModels.tricepsKickBack import receive_frame as tc
 
