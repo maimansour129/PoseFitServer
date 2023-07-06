@@ -79,6 +79,7 @@ module.exports.login_post = async (req, res) => {
 
     }
   }
+  else res.send("Invalid email or password")
 };
 
 module.exports.logout_get = (req, res) => {
