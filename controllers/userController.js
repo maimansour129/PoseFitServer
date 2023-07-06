@@ -47,7 +47,6 @@ const updateUser = async (req, res) => {
   res.status(200).send(user);
 };
 const getAllPlans = async (req, res) => {
-  console.log("teeeeeeeeeest " + req.body.email);
   Plan.find()
     .populate({
       path: "plan",
@@ -60,7 +59,6 @@ const getAllPlans = async (req, res) => {
     .catch((error) => console.log(error));
 };
 const getPlan = async (req, res) => {
-  console.log("teeeeeeeeeest " + req.body.email);
   User.find({ email: req.body.email })
     .select({ email: 1, _id: 0 })
     .populate({
@@ -87,7 +85,6 @@ const getPlanDetails = async (req, res) => {
 };
 
 const getName = async (req, res) => {
-  console.log("teeeeeeeeeest23 " + req.body.email);
   User.find({ email: req.body.email })
     .select({ name: 1, _id: 0 })
     .then((p) => res.send(p))
@@ -120,7 +117,6 @@ const updateStatus = async (req, res) => {
       const workout = plan.workouts.find((w) =>
         w.workout.equals(req.body.workoutId)
       );
-      console.log("ahoooooo ", workout);
       workout.status = "true";
 
       plan.save((err) => {

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const workout = require("../models/workout");
 
 const searchForWorkout = async (req, res) => {
-  console.log("hiiiiii");
   workout
     .find({ workoutName: { $regex: req.body.name, $options: "i" } })
     .then((result) => res.send(result))
