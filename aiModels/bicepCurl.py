@@ -1,16 +1,16 @@
 import cv2 as cv2
 import mediapipe as mp
 import numpy as np
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
 # # Curl counter variables
 counter = 0
-status = None
 stage = 'down'
-instructions = None
-landmarksList = None
-
+instructions = "Start training"
+landmarksList = []
+poseIsCorrect = False
 
 def calculate_angle(a, b, c):
     a = np.array(a)  # First
@@ -27,23 +27,24 @@ def calculate_angle(a, b, c):
     return angle
 
 
-def recieve_frame(frame):
+def receive_frame(frame):
 
     global counter
     global instructions
     global stage
-    global status
     global landmarksList
-    poseIsCorrect = False
+    global poseIsCorrect
 
     # Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
 
+        x = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
         # (1) => flip on x-axis (skeleton flipped while drawing)
-        flippedImagee = cv2.flip(frame, 1)
+        flippedImage = cv2.flip(x, 1)
 
         # Recolor image to RGB
-        image = cv2.cvtColor(flippedImagee, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(flippedImage, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
 
         # Make detection
@@ -78,9 +79,16 @@ def recieve_frame(frame):
             right_wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
                            landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
             
+            left_knee = [0,0]
+            right_knee = [0,0]
+
+            left_ankle = [0,0]
+            right_ankle = [0,0]
+
             # List to Draw Skeleton
             landmarksList = [left_wrist, left_elbow, left_shoulder, left_hip,
-                             right_hip, right_shoulder, right_elbow, right_wrist]
+                                left_knee, left_ankle, right_ankle, right_knee,
+                                right_hip, right_shoulder, right_elbow, right_wrist]
 
             # Calculate angle
             left_torso_angle = calculate_angle(
@@ -93,36 +101,15 @@ def recieve_frame(frame):
             right_elbow_angle = calculate_angle(
                 right_shoulder, right_elbow, right_wrist)
 
-            # Visualize angle
-            cv2.putText(image, str(left_elbow_angle),
-                        tuple(np.multiply(left_elbow, [640, 480]).astype(int)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,
-                                                        255, 255), 2, cv2.LINE_AA
-                        )
-            cv2.putText(image, "Torso: " + str(left_torso_angle),
-                        tuple(np.multiply(left_elbow, [240, 480]).astype(int)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,
-                                                        255, 255), 2, cv2.LINE_AA
-                        )
-
             # Curl counter logic
 
             if left_torso_angle > 20 or right_torso_angle > 20:
-                mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                          mp_drawing.DrawingSpec(
-                                              color=(255, 0, 0), thickness=4, circle_radius=2),
-                                          mp_drawing.DrawingSpec(
-                                              color=(0, 0, 255), thickness=4, circle_radius=2)
-                                          )
+                poseIsCorrect = False
+
             else:
                 poseIsCorrect = True
+                instructions = "Keep Going"
 
-                mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                          mp_drawing.DrawingSpec(
-                                              color=(245, 66, 230), thickness=2, circle_radius=2),
-                                          mp_drawing.DrawingSpec(
-                                              color=(0, 255, 0), thickness=2, circle_radius=2)
-                                          )
                 if (left_elbow_angle < 30 and right_elbow_angle < 30) and stage == 'down':
                     stage = "up"
                     counter += 1
@@ -135,10 +122,7 @@ def recieve_frame(frame):
                 if ((left_elbow_angle > 30 and left_elbow_angle < 160) and (right_elbow_angle > 30 and right_elbow_angle < 160)) and stage == 'down':
                     instructions = "Go Up more"
 
-            #Add bool in index 0 in skeleton list
-            landmarksList.insert(0,poseIsCorrect)
-
         except:
             pass
 
-    return image, counter, instructions,landmarksList
+    return image, counter, instructions, landmarksList, poseIsCorrect
