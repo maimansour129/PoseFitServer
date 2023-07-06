@@ -101,7 +101,7 @@ def receive_frame(frame):
             
             if ((left_torso_angle > 100) or (right_torso_angle > 100)) :
                 poseIsCorrect = False
-                instructions = "laaaaa"
+                instructions = "Fix your Posture"
 
                 # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                 #                 mp_drawing.DrawingSpec(color=(255,0,0), thickness=4, circle_radius=2), 

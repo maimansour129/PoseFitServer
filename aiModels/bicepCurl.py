@@ -105,6 +105,7 @@ def receive_frame(frame):
 
             if left_torso_angle > 20 or right_torso_angle > 20:
                 poseIsCorrect = False
+                instructions = "Close Your Elbow"
 
             else:
                 poseIsCorrect = True
