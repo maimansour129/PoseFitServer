@@ -38,7 +38,6 @@ const userSchema = new mongoose.Schema({
   plan: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "plan",
-    required: true,
   },
   activityLevel: {
     type: String,
