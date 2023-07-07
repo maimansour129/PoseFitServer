@@ -90,12 +90,12 @@ def receive_frame(frame):
 
 
         # counter logic
-        if ((angle_hip > 150) or (torso_arm_angle > 30)):
+        if ((angle_hip > 150) or (torso_arm_angle > 20)):
 
             instructions = "Fix your Posture"
             poseIsCorrect = False
 
-        if (angle_hip < 150) and (torso_arm_angle <= 30):
+        if (angle_hip < 150) and (torso_arm_angle <= 20):
 
             poseIsCorrect = True
 
