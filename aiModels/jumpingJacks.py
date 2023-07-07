@@ -116,14 +116,14 @@ def receive_frame(frame):
             
             poseIsCorrect = True
 
-            if ((knee_hip_angle >= 10) and ((left_arm_hip_angle >= 70) and (right_arm_hip_angle >= 70)) and (stage == "Down")):
+            if ((knee_hip_angle >= 30) and ((left_arm_hip_angle >= 90) and (right_arm_hip_angle >= 90)) and (stage == "Down")):
                 counter += 1
                 stage = "Up"
-                instructions = "GO Up"
-
-            elif ((knee_hip_angle < 10) and ((left_arm_hip_angle < 70) and (right_arm_hip_angle < 70))) and stage == "Up":
-                stage = "Down"
                 instructions = "GO Down"
+
+            elif ((knee_hip_angle < 30) and ((left_arm_hip_angle < 90) and (right_arm_hip_angle < 90))) and stage == "Up":
+                stage = "Down"
+                instructions = "GO Up"
 
             elif counter and counter % 5 == 0:
                 instructions = 'Keep Going'
