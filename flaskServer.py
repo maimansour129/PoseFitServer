@@ -2,7 +2,7 @@ import io
 from flask import Flask, jsonify, request
 import base64
 from PIL import Image
-import cv2
+# import cv2
 import numpy as np
 
 from aiModels.bicepCurl import receive_frame as bc
