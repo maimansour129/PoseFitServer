@@ -10,7 +10,7 @@ pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 # # Curl counter variables
 counter = 0
-stage = 'down'
+stage = 'Down'
 instructions = "Start Training"
 landmarksList = []
 poseIsCorrect = False
@@ -114,15 +114,14 @@ def receive_frame(frame):
         else:
 
             poseIsCorrect = True
-            instructions = "Keep Going"
 
-            if ((left_shoulder_angle > 120 and right_shoulder_angle > 120) and (left_elbow_angle > 120 and right_elbow_angle > 120)) and stage == "down":
-                stage = "up"
+            if ((left_shoulder_angle > 120 and right_shoulder_angle > 120) and (left_elbow_angle > 120 and right_elbow_angle > 120)) and stage == "Down":
+                stage = "Up"
                 counter += 1
                 instructions = "Go Down"
 
-            elif (left_shoulder_angle < 60 and right_shoulder_angle < 60) and stage == "up":
-                stage = "down"
+            elif (left_shoulder_angle < 60 and right_shoulder_angle < 60) and stage == "Up":
+                stage = "Down"
                 instructions = "Go Up"
     except:
         pass
